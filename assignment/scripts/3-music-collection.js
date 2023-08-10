@@ -58,11 +58,36 @@ console.log(findByArtist("Portugal. The Man"));
 console.log(findByArtist("Kiiara"));
 
 let albumRayCharles = { artist: 'Ray Charles', year: 1957 }
+let test1 = {artist: "Kiiara", yearPublished: 2016}
+let emptyTest = {};
+
+
 function search(searchObject){
-    for (let i; i < collection.length; i ++){
-        if (searchObject == collection[i]) {
-            
-        }
+    let foundMatch = [];
+    // if (Object.keys(searchObject) == 0) {
+        console.log(JSON.stringify(searchObject))
+        if (JSON.stringify(searchObject) == "{}") {
+        // Object.keys(searchObject.length) // QUESTION ON THIS
+        // JSON.stringify(searchObject)
+        return collection;
     }
+    for (let i= 0; i < collection.length; i ++){
+        if (searchObject.artist == collection[i].artist
+            && searchObject.year == collection[i].yearPublished) {
+            foundMatch.push(collection[i]);
+        } //end if artist and year match
+        // The following catches the error if the searchObject uses the property yearPublished instead  of year. 
+        else if (searchObject.artist == collection[i].artist
+            && searchObject.yearPublished == collection[i].yearPublished) {
+            foundMatch.push(collection[i]);
+        }//end year vs yearPublished error
+    }
+    return foundMatch
 }// end of search()
 
+console.log(search(albumRayCharles));
+console.log(search(test1));
+console.log(search(emptyTest));
+
+
+//explore next.js
