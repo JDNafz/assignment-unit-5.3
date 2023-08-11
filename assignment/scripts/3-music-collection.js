@@ -143,5 +143,3 @@ console.log(search(properTrackSearch));
 let prioritizeTrackSearch = {artist: "Kiiara", yearPublished: 2016,tracks: [{trackName: "But, your leg, AHH, it's caught  in a bear trap"}]};
 console.log(search(prioritizeTrackSearch)); // returns shia labeouf album
 
-
-//explore next.js
