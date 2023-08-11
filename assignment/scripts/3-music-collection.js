@@ -24,43 +24,28 @@ function findByArtist(searchName){
     return foundArtists;
 }//end findByArtist
 
-function search(searchObject){  // how to add description to function?
-    let foundMatch = [];
-    let foundMatch1 = [];
-    // if (Object.keys(searchObject.length) == 0) {            // QUESTION ON THIS
+function search(searchObject){  
+    // searchObject MUST BE an OBJECT, include key/value pairs of { artist: ... , year: ... , yearPublished: ... , [{name:... , duration: ...},{other tracks...}]}
+    let foundMatch = []; // results output array
+
     // console.log(JSON.stringify(searchObject))
     let stringObj = JSON.stringify(searchObject);
 
-    //if (searchObject === undefined)
-    if (stringObj == "{}") {
+    // check if search({}) or search()   //catches if an object is correctly input but is empty or if search doesn't contain object
+    if (stringObj == "{}" || searchObject == undefined) {
         return collection;
 
     //check for trackName FIRST
-    // else if (searchObject.hasOwnProperty("trackName")){ //other solution
     } else if (stringObj.includes("trackName")) {
-        // console.log("yes it does");
-        console.log(searchObject.tracks);
-        // console.log(searchObject.tracks[0].trackName); // debugging looking for correct trackName == tracks[j].name
-        // go through each
-        for (let i = 0; i < collection.length; i++){
-            // in each album loop over each track
-            for (let j = 0; j < collection[i].tracks.length; j ++){
-
-                if (searchObject.tracks[0].trackName == collection[i].tracks[j].name) { // 
-                    foundMatch.push(collection[i]);
-                }
-            }
-        }
+        // go through each track in each album in the collection
         for (let album of collection){
             for (let track of album.tracks){
                 if (searchObject.tracks[0].trackName == track.name) {
-                    foundMatch1.push(album);
+                    foundMatch.push(album);
                 }
             }
         }
-        console.log(foundMatch1);
-
-        console.log(foundMatch);
+        // console.log(foundMatch); //used for debugging initially
     // end search by trackName
 
 
@@ -95,10 +80,7 @@ function showCollection(collection){
         ;
         console.log(albumString);
     }
-}//end showCollection()
-
-//end functions
-
+}
 
 
 
@@ -106,7 +88,7 @@ function showCollection(collection){
 console.log('***** Music Collection *****')
 
 //adding albums
-console.log(addToCollection("When Bears Attack","Banjo and Kazooie",1998,[{name: "The Fight", duration: 180},{name: "Wounded", duration: 155},{name: "In for the kill", duration: 240},{name: "Oh, no my leg it's caught  in a bear trap", duration: 300}]));
+console.log(addToCollection("When Bears Attack","shia labeouf",2014,[{  name: "The Fight", duration: 180},{name: "Wounded", duration: 155},{name: "In for the kill", duration: 240},{name: "But, your leg, AHH, it's caught  in a bear trap", duration: 300}]));
 console.log(addToCollection("Space Ghost Coast to Coast","Glass Animals",2022,[{name: "Wavy Davie",duration: 200},{name: "Ghosts", duration: 290},{name: "lazers",duration: 140}]));
 console.log(addToCollection("Come to Brazil","Why Don't We",2020,[{name: "Come to Brazil", duration: 120},{name: "Eu fala queijo",duration: 20}]));
 console.log(addToCollection("Don't Wait", "Mapei", 2017,[{name: "Don't Wait", duration: 350},{ name: "Move on Already", duration: 280}, {name: "I'm still waiting any way", duration: 60}]));
@@ -134,16 +116,32 @@ console.log(findByArtist("Kiiara"));
 console.log("************* testing search() ****************************")
 
 let albumRayCharles = { artist: 'Ray Charles', year: 1957 }
-let test1 = {artist: "Kiiara", yearPublished: 2016}
-let emptyTest = {};
-
 console.log(search(albumRayCharles));
+
+let test1 = {artist: "Kiiara", yearPublished: 2016}
 console.log(search(test1));
-console.log(search(emptyTest));
 
+let emptyTest = {};
+console.log(search(emptyTest));// returns all
+console.log(search());// returns all
 
-console.log(search( {tracks: [{trackName: "Feel it for now"}] }              ))
+let trackSearch1 = {tracks: [{trackName: "Feel it for now"}] }  
+console.log(search(trackSearch1)); //returns Glass Animals Album
 
+let trackSearch2 = {tracks: [{trackName: "Whippin"}]}
+console.log(search(trackSearch2));// returns Kiiara Album
+
+//proper search format for trackName
+let properTrackSearch = {
+                      tracks: [// main obj property (array)
+                               {//array contains objects
+                                 trackName: //track obj key
+                                           //value
+                                           "Whippin"}]}; //close all brackets
+console.log(search(properTrackSearch));
+
+let prioritizeTrackSearch = {artist: "Kiiara", yearPublished: 2016,tracks: [{trackName: "But, your leg, AHH, it's caught  in a bear trap"}]};
+console.log(search(prioritizeTrackSearch)); // returns shia labeouf album
 
 
 //explore next.js
